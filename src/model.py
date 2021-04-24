@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 from sklearn import tree
 from sklearn.linear_model import SGDRegressor
+from sklearn.neural_network import MLPRegressor
 import numpy as np
 import pickle
 from sklearn.svm import SVR
@@ -118,7 +119,7 @@ class BaselineEncodedModel:
     def train(self, df_train):
         X = self.vectorize_sequences(df_train['sequence'].to_numpy())
         y = df_train['mean_growth_PH'].to_numpy()
-        model = SGDRegressor(max_iter=1000, tol=1e-3)
+        model = make_pipeline(StandardScaler(), MLPRegressor(hidden_layer_sizes= (200, 200), random_state=1, max_iter=500))
         model.fit(X, y)
 
         with open(self.model_file_path, 'wb') as model_file:

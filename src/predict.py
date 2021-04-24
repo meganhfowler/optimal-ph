@@ -4,7 +4,7 @@ import pandas as pd
 from model import BaselineEncodedModel
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--input_csv', default='./src/input.csv')
+parser.add_argument('--input_csv', default='./submission/input.csv')
 args = parser.parse_args()
 
 # Config
