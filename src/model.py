@@ -107,8 +107,6 @@ class BaselineEncodedModel:
         self.model_file_path = model_file_path
 
     def vectorize_sequences(self, sequence_array):
-        #vectorize_on_length = np.vectorize(Utils.encode_and_pad)
-        #return np.reshape(vectorize_on_length(sequence_array), (-1, 1))
         encoded_sequences = [
             Utils.encode_and_pad(sequence)
             for sequence in sequence_array
@@ -120,11 +118,17 @@ class BaselineEncodedModel:
         y = df_train['mean_growth_PH'].to_numpy()
         model = tree.DecisionTreeRegressor()
         model.fit(X, y)
-        self.model = model
+
+        with open(self.model_file_path, 'wb') as model_file:
+            pickle.dump(model, model_file)
+
 
     def predict(self, df_test):
+        with open(self.model_file_path, 'rb') as model_file:
+            model: tree.DecisionTreeRegressor = pickle.load(model_file)
+
         X = df_test['sequence'].to_numpy()
         X_vectorized = self.vectorize_sequences(X)
-        return self.model.predict(X_vectorized)
+        return model.predict(X_vectorized)
 
 
