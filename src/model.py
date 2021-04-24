@@ -1,9 +1,7 @@
 from sklearn import tree
 import numpy as np
 import pickle
-from sklearn.svm import SVR
-from sklearn.pipeline import make_pipeline
-from sklearn.preprocessing import StandardScaler
+from sklearn.neural_network import MLPRegressor
 
 
 class BaselineModel:
@@ -19,7 +17,7 @@ class BaselineModel:
         y = df_train['mean_growth_PH'].to_numpy()
 
         #model = tree.DecisionTreeRegressor()
-        model = make_pipeline(StandardScaler(), SVR(C=0.8, epsilon=0.3))
+        model = MLPRegressor(random_state=1, max_iter=500)
         model.fit(X, y)
 
         with open(self.model_file_path, 'wb') as model_file:
