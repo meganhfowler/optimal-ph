@@ -1,10 +1,7 @@
 #!/usr/bin/env python3
 from sklearn import tree
-<<<<<<< HEAD
 from sklearn.linear_model import SGDRegressor
 from sklearn.neural_network import MLPRegressor
-=======
->>>>>>> b1f929250df6ef3797bc62d34aa32cfb026364e5
 import numpy as np
 import pickle
 from sklearn.svm import LinearSVR
@@ -25,7 +22,6 @@ class BaselineModel:
         y = df_train['mean_growth_PH'].to_numpy()
 
         #model = tree.DecisionTreeRegressor()
-<<<<<<< HEAD
         model = make_pipeline(StandardScaler(), SVR(C=1.0, epsilon=0.2))
         model.fit(X, y)
 
@@ -121,9 +117,6 @@ class BaselineEncodedModel:
         X = self.vectorize_sequences(df_train['sequence'].to_numpy())
         y = df_train['mean_growth_PH'].to_numpy()
         model = make_pipeline(StandardScaler(), MLPRegressor(hidden_layer_sizes= (200, 200), random_state=1, max_iter=500))
-=======
-        model = make_pipeline(StandardScaler(), LinearSVR(C=0.5, random_state=0, tol=1e-5))
->>>>>>> b1f929250df6ef3797bc62d34aa32cfb026364e5
         model.fit(X, y)
 
         with open(self.model_file_path, 'wb') as model_file:
