@@ -50,3 +50,5 @@ prediction
 ```
 
 You can run the prediction script with `python3 src/predict.py --input_csv submission/input.csv`
+
+Alex was here 
