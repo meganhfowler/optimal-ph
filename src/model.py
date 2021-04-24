@@ -7,7 +7,12 @@ import pickle
 from sklearn.svm import LinearSVR
 from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import StandardScaler
-
+import torch
+from torch import nn
+import torch.nn.functional as F
+from torchvision import datasets, transforms
+from torch.autograd import Variable
+import torch.utils.data as Data
 
 class BaselineModel:
     def __init__(self, model_file_path):
@@ -61,6 +66,9 @@ class Utils:
             'V': 0.72,
             'W': 0.76,
             'Y': 0.80,
+            'B': 0.84,
+            'X': 0.88,
+            'Z': 0.92,
         }
         e = mapping.get(aa.upper())
         if e is None:
@@ -89,7 +97,7 @@ class Utils:
 
 
 
-class BaselineEncodedModel:
+class NeuralNet:
     def __init__(self, model_file_path):
         self.model_file_path = model_file_path
 
@@ -98,22 +106,47 @@ class BaselineEncodedModel:
             Utils.encode_and_pad(sequence)
             for sequence in sequence_array
         ]
-        return np.array(encoded_sequences)
+        X = np.array(encoded_sequences)
+        return torch.Tensor(X).float()
 
     def train(self, df_train):
         X = self.vectorize_sequences(df_train['sequence'].to_numpy())
-        y = df_train['mean_growth_PH'].to_numpy()
-        model = make_pipeline(StandardScaler(), MLPRegressor(hidden_layer_sizes= (200, 200), random_state=1, max_iter=500))
-        model.fit(X, y)
+        y = torch.Tensor(df_train['mean_growth_PH'].to_numpy())
+        X = Variable(X)
+        y = Variable(y)
+        model = nn.Sequential(nn.Linear(8192, 256),
+                nn.ReLU(),
+                nn.Linear(256, 64),
+                nn.ReLU(),
+                nn.Linear(64, 1),
+                )
+        loss_func = nn.MSELoss()
+        optimizer = torch.optim.SGD(model.parameters(), lr=0.003)
+        BATCH_SIZE = 64
+        EPOCH = 5
+        torch_dataset = Data.TensorDataset(X, y)
+        loader = Data.DataLoader(
+                dataset=torch_dataset,
+                batch_size=BATCH_SIZE,
+                shuffle=True, num_workers=2,)
+        for epoch in range(EPOCH):
+            for step, (batch_x, batch_y) in enumerate(loader):
+                b_x = Variable(batch_x)
+                b_y = Variable(batch_y)
+
+                prediction = model(b_x).squeeze()
+                loss = loss_func(prediction, b_y)
+                optimizer.zero_grad()
+                loss.backward()
+                optimizer.step()
 
         with open(self.model_file_path, 'wb') as model_file:
             pickle.dump(model, model_file)
 
     def predict(self, df_test):
         with open(self.model_file_path, 'rb') as model_file:
-            model: MLPRegressor = pickle.load(model_file)
+            model: model = pickle.load(model_file)
 
-        X = df_test['sequence'].to_numpy()
-        X_vectorized = self.vectorize_sequences(X)
-        return model.predict(X_vectorized)
+        X = self.vectorize_sequences(df_test['sequence'].to_numpy())
+        return model(X)
 

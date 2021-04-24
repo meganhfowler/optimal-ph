@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 import argparse
 import pandas as pd
-from model import BaselineEncodedModel
+from model import NeuralNet
+import torch
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--input_csv', default='submission/input.csv')
@@ -15,10 +16,11 @@ with open(args.input_csv) as input_csv:
     df = pd.read_csv(input_csv)
 
 # Run predictions
-y_predictions = BaselineEncodedModel(model_file_path='src/model.pickle').predict(df)
-
+y_predictions = NeuralNet(model_file_path='src/model.pickle').predict(df)
 # Save predictions to file
-df_predictions = pd.DataFrame({'prediction': y_predictions})
+y_predictions = y_predictions.detach().numpy()
+df_predictions = pd.DataFrame(y_predictions)
+df_predictions.columns = ['prediction']
 df_predictions.to_csv(output_file_path, index=False)
 
 print(f'{len(y_predictions)} predictions saved to a csv file')
