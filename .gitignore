@@ -133,3 +133,10 @@ dmypy.json
 
 #Ignore JUpyter Notebooks
 *.ipynb
+
+# Frank's Shit
+.devcontainer/
+.vscode/
+data/clean_script.py
+data/train_set_clean.csv
+test/bak/
