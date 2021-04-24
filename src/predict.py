@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 import argparse
 import pandas as pd
-from model import BaselineEncodedModel
+from model import BaselineModel
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--input_csv', default='input.csv')
+parser.add_argument('--input_csv', default='submission/input.csv')
 args = parser.parse_args()
 
 # Config
@@ -15,7 +15,7 @@ with open(args.input_csv) as input_csv:
     df = pd.read_csv(input_csv)
 
 # Run predictions
-y_predictions = BaselineEncodedModel(model_file_path='src/model.pickle').predict(df)
+y_predictions = BaselineModel(model_file_path='src/model.pickle').predict(df)
 
 # Save predictions to file
 df_predictions = pd.DataFrame({'prediction': y_predictions})
