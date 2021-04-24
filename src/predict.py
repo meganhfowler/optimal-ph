@@ -4,11 +4,11 @@ import pandas as pd
 from model import BaselineModel
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--input_csv', default='./submission/input.csv')
+parser.add_argument('--input_csv', default='submission/input.csv')
 args = parser.parse_args()
 
 # Config
-output_file_path = './test/predictions.csv'
+output_file_path = 'predictions.csv'
 
 # Load input.csv
 with open(args.input_csv) as input_csv:

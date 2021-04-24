@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 import pandas as pd
 import argparse
 from sklearn.metrics import mean_squared_error
@@ -23,7 +22,7 @@ def benchmark(predictions_file, actuals_file):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--predictions', default='./test/predictions.csv')
-    parser.add_argument('--actual', default='./test/actual.csv')
+    parser.add_argument('--predictions', default='predictions.csv')
+    parser.add_argument('--actual', default='actual.csv')
     args = parser.parse_args()
     print('Benchmarks: ', benchmark(args.predictions, args.actual))
