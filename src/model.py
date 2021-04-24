@@ -13,6 +13,7 @@ import torch.nn.functional as F
 from torchvision import datasets, transforms
 from torch.autograd import Variable
 import torch.utils.data as Data
+import config
 
 class BaselineModel:
     def __init__(self, model_file_path):
@@ -114,6 +115,7 @@ class NeuralNet:
         y = torch.Tensor(df_train['mean_growth_PH'].to_numpy())
         X = Variable(X)
         y = Variable(y)
+        conf = config.NeuralConfig
         model = nn.Sequential(nn.Linear(8192, 256),
                 nn.ReLU(),
                 nn.Linear(256, 64),
