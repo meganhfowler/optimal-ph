@@ -111,9 +111,11 @@ class BaselineEncodedModel:
             pickle.dump(model, model_file)
 
     def predict(self, df_test):
+        breakpoint()
         with open(self.model_file_path, 'rb') as model_file:
             model: MLPRegressor = pickle.load(model_file)
 
         X = df_test['sequence'].to_numpy()
         X_vectorized = self.vectorize_sequences(X)
         return model.predict(X_vectorized)
+
