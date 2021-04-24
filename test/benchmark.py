@@ -23,7 +23,7 @@ def benchmark(predictions_file, actuals_file):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--predictions', default='./test/predictions.csv')
-    parser.add_argument('--actual', default='./test/actual.csv')
+    parser.add_argument('--predictions', default='test/predictions.csv')
+    parser.add_argument('--actual', default='test/actual.csv')
     args = parser.parse_args()
     print('Benchmarks: ', benchmark(args.predictions, args.actual))

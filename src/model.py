@@ -21,7 +21,6 @@ class BaselineModel:
         X = self.vectorize_sequences(df_train['sequence'].to_numpy())
         y = df_train['mean_growth_PH'].to_numpy()
 
-        #model = tree.DecisionTreeRegressor()
         model = make_pipeline(StandardScaler(), SVR(C=1.0, epsilon=0.2))
         model.fit(X, y)
 
