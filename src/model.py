@@ -1,6 +1,9 @@
 from sklearn import tree
 import numpy as np
 import pickle
+from sklearn.svm import SVR
+from sklearn.pipeline import make_pipeline
+from sklearn.preprocessing import StandardScaler
 
 
 class BaselineModel:
@@ -15,7 +18,8 @@ class BaselineModel:
         X = self.vectorize_sequences(df_train['sequence'].to_numpy())
         y = df_train['mean_growth_PH'].to_numpy()
 
-        model = tree.DecisionTreeRegressor()
+        #model = tree.DecisionTreeRegressor()
+        model = make_pipeline(StandardScaler(), SVR(C=1.0, epsilon=0.2))
         model.fit(X, y)
 
         with open(self.model_file_path, 'wb') as model_file:
