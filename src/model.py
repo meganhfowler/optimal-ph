@@ -87,18 +87,6 @@ class Utils:
     def encode_and_pad(prot: str):
         return Utils.pad(Utils.encode_protein(prot), Utils.max_length)
 
-    def score(self, df_test):
-        X = df_test['sequence'].to_numpy()
-        X_vectorized = self.vectorize_sequences(X)
-        y_true = df_test['mean_growth_PH'].to_numpy()
-        y_pred = self.predict(df_test)
-        return (self.mean_squared(y_true, y_pred), self.spearmanr(y_true, y_pred))
-
-    def mean_squared(self, y_true, y_pred):
-        return sklearn.metrics.mean_squared_error(y_true, y_pred)
-
-    def spearmanr(self, y_true, y_pred):
-        return scipy.stats.spearmanr(y_true, y_pred)
 
 
 
@@ -124,7 +112,7 @@ class BaselineEncodedModel:
 
     def predict(self, df_test):
         with open(self.model_file_path, 'rb') as model_file:
-            model: tree.DecisionTreeRegressor = pickle.load(model_file)
+            model: MLPRegressor = pickle.load(model_file)
 
         X = df_test['sequence'].to_numpy()
         X_vectorized = self.vectorize_sequences(X)
