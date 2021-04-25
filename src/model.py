@@ -115,7 +115,6 @@ class NeuralNet:
         y = torch.Tensor(df_train['mean_growth_PH'].to_numpy())
         X = Variable(X)
         y = Variable(y)
-        conf = config.NeuralConfig
         model = nn.Sequential(nn.Linear(8192, 256),
                 nn.ReLU(),
                 nn.Linear(256, 64),
