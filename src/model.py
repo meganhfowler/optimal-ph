@@ -122,7 +122,7 @@ class NeuralNet:
                 nn.Linear(64, 1),
                 )
         loss_func = nn.MSELoss()
-        optimizer = torch.optim.SGD(model.parameters(), lr=0.003)
+        optimizer = torch.optim.Adam(model.parameters(), lr=0.003)
         BATCH_SIZE = 64
         EPOCH = 500
         torch_dataset = Data.TensorDataset(X, y)
