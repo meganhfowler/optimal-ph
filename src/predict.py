@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import argparse
 import pandas as pd
-from model import NeuralNet
+from model import NeuralNet, BaselineModel
 import torch
 import config
 
@@ -31,7 +31,7 @@ def neural_predict():
 def encoded_predict():
     # old version:
     # Run predictions
-    y_predictions = BaselineEncodedModel(model_file_path='src/model.pickle').predict(df)
+    y_predictions = BaselineModel(model_file_path='src/model.pickle').predict(df)
 
     # Save predictions to file
     df_predictions = pd.DataFrame({'prediction': y_predictions})
