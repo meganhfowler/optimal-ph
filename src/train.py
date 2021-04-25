@@ -3,6 +3,13 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 from model import NeuralNet, BaselineModel
 import config
+import torch
+
+if torch.cuda.is_available():
+  dev = "cuda:0"
+else:
+  dev = "cpu"
+device = torch.device(dev)
 
 # Load data set
 with open('data/train_set.csv', 'rb') as train_data:
